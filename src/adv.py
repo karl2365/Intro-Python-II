@@ -1,7 +1,8 @@
+import sys
 from room import Room
-
+from player import Player
+playerName = sys.argv[1]
 # Declare all the rooms
-
 room = {
     'outside':  Room("Outside Cave Entrance",
                      "North of you, the cave mount beckons"),
@@ -35,17 +36,65 @@ room['treasure'].s_to = room['narrow']
 
 #
 # Main
+def action():
+    print('\n')
+    print(player.name, "please enter n, s, e, w for North, South, East or West\nq to quit game")
+    return input("enter your move: ")
+def badMove():    
+    print('\nYou can not move in that direction from here, please try again')            
 #
-
 # Make a new player object that is currently in the 'outside' room.
-
+player = Player(playerName, 0, room["outside"] )
 # Write a loop that:
-#
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
+play = True
+while play:
+    # * Prints the current room name
+    print('\n', player.location.name)
+    # * Prints the current description (the textwrap module might be useful here).
+    print(player.location.description)
+    # * Waits for user input and decides what to do.
+    #
+    move = action()
+
+
+    # If the user enters a cardinal direction, attempt to move to the room there.
+    # Print an error message if the movement isn't allowed.
+    #
+    # If the user enters "q", quit the game.
+    if move == 'q':
+        print('Thank you for playing!')
+        exit(0)
+    elif player.location == room['outside']:
+        if move == 'n':
+            player.location = room['foyer']
+        else:
+            badMove()
+    elif player.location == room['foyer']:
+        if move == 's':
+            player.location = room['outside']
+        elif move == 'n':
+            player.location = room['overlook']
+        elif move == 'e':
+            player.location = room['narrow']
+        else:
+            badMove()
+    elif player.location == room['overlook']:
+        if move == 's':
+            player.location = room['foyer']
+        else: 
+            badMove()
+    elif player.location == room['narrow']:
+        if move == 'w':
+            player.location = room['foyer']
+        elif move == 'n':
+            player.location = room['treasure']
+        else: 
+            badMove()
+    elif player.location == room['treasure']:
+        if move == 's':
+            player.location = room['narrow']
+        else:
+            badMove()
+    else:
+        badMove()
+
