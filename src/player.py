@@ -1,14 +1,12 @@
 # Write a class to hold player information, e.g. what room they are in
 # currently.
-
 class Player:
-    def __init__(self, name, score=0, location='outside'):
+    def __init__(self, name, current_room):
         self.name = name
-        self.score = score
-        self.location = location
-    def addScore(self, value):
-        self.score += value
-    def changeLocation(self, newLocation):
-        self.location = newLocation
-
-    
+        self.current_room = current_room
+    def travel(self, direction):
+        if getattr(self.current_room, f"{direction}_to"):
+            self.current_room = getattr(self.current_room, f"{direction}_to")
+            print(self.current_room)
+        else:
+            print("You cannot move in that direction")
